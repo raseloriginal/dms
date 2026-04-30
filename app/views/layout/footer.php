@@ -120,7 +120,7 @@
     <script>
         const URLROOT = '<?php echo URLROOT; ?>';
     </script>
-    <script src="<?php echo URLROOT; ?>/public/assets/js/main.js"></script>
+    <script src="<?php echo URLROOT; ?>/public/assets/js/main.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
 

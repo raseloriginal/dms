@@ -22,16 +22,25 @@ const getManifest = () => JSON.parse(localStorage.getItem('manifest_checks') || 
 const setManifest = m => localStorage.setItem('manifest_checks', JSON.stringify(m));
 
 // ===== PRODUCT FILTERING =====
+const catMapping = {
+    'সব': 'All',
+    'ফল': 'Fruits',
+    'সবজি': 'Vegetables',
+    'ডেইরি': 'Dairy',
+    'বেকারি': 'Bakery',
+    'পানীয়': 'Beverages'
+};
+
 function setCategory(cat, el) {
-    currentCategory = cat;
+    currentCategory = catMapping[cat] || cat;
     document.querySelectorAll('.cat-chip').forEach(c => {
-        c.classList.remove('bg-brand', 'text-white', 'shadow-lg', 'shadow-brand/20');
-        c.classList.add('bg-white', 'text-slate-500', 'shadow-sm', 'border', 'border-slate-100');
+        c.classList.remove('bg-brand_orange', 'text-white', 'shadow-lg', 'shadow-brand_orange/20');
+        c.classList.add('bg-slate-50', 'text-slate-400', 'border', 'border-slate-100');
     });
     
     if (el) {
-        el.classList.add('bg-brand', 'text-white', 'shadow-lg', 'shadow-brand/20');
-        el.classList.remove('bg-white', 'text-slate-500', 'shadow-sm', 'border', 'border-slate-100');
+        el.classList.add('bg-brand_orange', 'text-white', 'shadow-lg', 'shadow-brand_orange/20');
+        el.classList.remove('bg-slate-50', 'text-slate-400', 'border', 'border-slate-100');
     }
     
     filterProducts();
@@ -80,36 +89,71 @@ function changeQty(id, delta) {
 
 function updateCartUI() {
     const cart = getCart();
-    const totalItems = Object.values(cart).reduce((a, b) => a + b.qty, 0);
-    const totalPrice = Object.values(cart).reduce((a, b) => a + (b.price * b.qty), 0);
+    const cartValues = Object.values(cart);
+    
+    let totalItems = 0;
+    let subtotal = 0;
+    
+    cartValues.forEach(item => {
+        const qty = parseInt(item.qty) || 0;
+        const price = parseFloat(item.price) || 0;
+        totalItems += qty;
+        subtotal += price * qty;
+    });
+    
+    const totalWithFee = subtotal > 0 ? (subtotal + DELIVERY_FEE) : 0;
     
     const badge = document.getElementById('cartBadge');
     const totalFloat = document.getElementById('cartTotalFloat');
     const floatBtn = document.getElementById('floatCart');
     
     if (badge) badge.textContent = totalItems;
-    if (totalFloat) totalFloat.textContent = `$${totalPrice.toFixed(2)}`;
+    if (totalFloat) totalFloat.textContent = `$${totalWithFee.toFixed(2)}`;
     
     if (floatBtn) {
         if (totalItems > 0) {
-            floatBtn.classList.remove('hidden', 'translate-y-10', 'opacity-0');
+            floatBtn.classList.remove('hidden');
+            // Ensure display: block is set before removing opacity/transform
+            setTimeout(() => {
+                floatBtn.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
         } else {
-            floatBtn.classList.add('hidden', 'translate-y-10', 'opacity-0');
+            floatBtn.classList.add('translate-y-10', 'opacity-0');
+            setTimeout(() => {
+                if (Object.values(getCart()).length === 0) {
+                    floatBtn.classList.add('hidden');
+                }
+            }, 300);
         }
     }
     
-    // Update shop grid buttons if we're on home
-    Object.keys(cart).forEach(id => {
-        const ctrl = document.getElementById(`ctrl-${id}`);
-        if (ctrl) {
-            const qty = cart[id].qty;
+    // Sync shop grid buttons
+    document.querySelectorAll('[id^="ctrl-"]').forEach(ctrl => {
+        const id = ctrl.id.replace('ctrl-', '');
+        const item = cart[id];
+        
+        if (item) {
             ctrl.innerHTML = `
                 <div class="flex items-center justify-between bg-slate-50 border border-slate-100 rounded p-1 h-11">
                     <button onclick="updateShopQty(${id}, -1)" class="w-10 h-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors"><i class="fa-solid fa-minus"></i></button>
-                    <span class="font-bold text-slate-900 text-sm">${qty}</span>
+                    <span class="font-bold text-slate-900 text-sm">${item.qty}</span>
                     <button onclick="updateShopQty(${id}, 1)" class="w-10 h-full flex items-center justify-center text-brand"><i class="fa-solid fa-plus"></i></button>
                 </div>
             `;
+        } else if (typeof ALL_PRODUCTS !== 'undefined') {
+            const p = ALL_PRODUCTS.find(x => x.id == id);
+            if (p) {
+                const safeName = p.name.replace(/'/g, "\\'");
+                ctrl.innerHTML = `
+                    <button 
+                        onclick="addToCart({id: ${p.id}, name: '${safeName}', price: ${p.price}, icon: '${p.icon}'})"
+                        class="w-full h-11 bg-brand hover:bg-brand-dark text-white rounded flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-brand/20 font-bold text-[10px]"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        ব্যাগে যোগ করুন
+                    </button>
+                `;
+            }
         }
     });
 }
