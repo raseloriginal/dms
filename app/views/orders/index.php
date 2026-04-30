@@ -54,8 +54,12 @@
                 <div class="flex items-center justify-between pt-5 border-t border-slate-50">
                     <div class="flex items-center -space-x-3">
                         <?php foreach(array_slice($order->items, 0, 4) as $item): ?>
-                            <div class="w-10 h-10 rounded bg-slate-50 border-2 border-white flex items-center justify-center text-sm text-brand shadow-sm">
-                                <i class="fa-solid <?php echo $item->icon; ?>"></i>
+                            <div class="w-10 h-10 rounded overflow-hidden bg-slate-50 border-2 border-white flex items-center justify-center text-sm text-brand shadow-sm">
+                                <?php if(!empty($item->image)): ?>
+                                    <img src="<?php echo URLROOT; ?>/uploads/<?php echo $item->image; ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <i class="fa-solid <?php echo $item->icon; ?>"></i>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                         <?php if(count($order->items) > 4): ?>
@@ -64,7 +68,7 @@
                             </div>
                         <?php endif; ?>
                     </div>
-                    <span class="text-2xl font-bold text-brand_orange">$<?php echo number_format($order->total, 2); ?></span>
+                    <span class="text-2xl font-bold text-brand_orange">৳<?php echo number_format($order->total, 2); ?></span>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -114,7 +118,7 @@
     <div class="px-6 py-8 border-t border-slate-50 bg-slate-50/30 flex items-center justify-between">
         <div class="flex flex-col">
             <span class="text-[9px] font-bold text-slate-400">সর্বমোট</span>
-            <span id="popupTotal" class="text-3xl font-bold text-brand_orange">$0.00</span>
+            <span id="popupTotal" class="text-3xl font-bold text-brand_orange">৳0.00</span>
         </div>
         <div class="flex gap-2">
             <button onclick="callCustomer()" class="w-12 h-12 bg-white border border-slate-100 rounded-md flex items-center justify-center text-brand shadow-sm"><i class="fa-solid fa-phone"></i></button>

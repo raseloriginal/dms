@@ -73,7 +73,7 @@ function addToCart(product) {
     cart[product.id].qty += 1;
     setCart(cart);
     updateCartUI();
-    showToast(`${product.name} ব্যাগে যোগ করা হয়েছে`);
+    showToast(`${product.name} ব্যাগে যোগ করা হয়েছে`, product.image);
 }
 
 function changeQty(id, delta) {
@@ -108,7 +108,7 @@ function updateCartUI() {
     const floatBtn = document.getElementById('floatCart');
     
     if (badge) badge.textContent = totalItems;
-    if (totalFloat) totalFloat.textContent = `$${totalWithFee.toFixed(2)}`;
+    if (totalFloat) totalFloat.textContent = `৳${totalWithFee.toFixed(2)}`;
     
     if (floatBtn) {
         if (totalItems > 0) {
@@ -146,7 +146,7 @@ function updateCartUI() {
                 const safeName = p.name.replace(/'/g, "\\'");
                 ctrl.innerHTML = `
                     <button 
-                        onclick="addToCart({id: ${p.id}, name: '${safeName}', price: ${p.price}, icon: '${p.icon}'})"
+                        onclick="addToCart({id: ${p.id}, name: '${safeName}', price: ${p.price}, icon: '${p.icon}', image: '${p.image || ''}'})"
                         class="w-full h-11 bg-brand hover:bg-brand-dark text-white rounded flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-brand/20 font-bold text-[10px]"
                     >
                         <i class="fa-solid fa-plus"></i>
@@ -167,7 +167,7 @@ function updateShopQty(id, delta) {
         if (p && ctrl) {
             ctrl.innerHTML = `
                 <button 
-                    onclick="addToCart({id: ${p.id}, name: '${p.name}', price: ${p.price}, icon: '${p.icon}'})"
+                    onclick="addToCart({id: ${p.id}, name: '${p.name}', price: ${p.price}, icon: '${p.icon}', image: '${p.image || ''}'})"
                     class="w-full h-11 bg-brand hover:bg-brand-dark text-white rounded flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-brand/20 font-bold text-[10px]"
                 >
                     <i class="fa-solid fa-plus"></i>
@@ -223,12 +223,12 @@ function renderCartPanel() {
 
     list.innerHTML = Object.values(cart).map(item => `
         <div class="flex items-center gap-4 bg-white p-3 rounded-2xl border border-slate-50 shadow-sm">
-            <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-xl text-slate-800">
-                <i class="fa-solid ${item.icon}"></i>
+            <div class="w-12 h-12 bg-slate-50 rounded-xl overflow-hidden flex items-center justify-center text-xl text-slate-800 border border-slate-100">
+                ${item.image ? `<img src="${URLROOT}/uploads/${item.image}" class="w-full h-full object-cover">` : `<i class="fa-solid ${item.icon}"></i>`}
             </div>
             <div class="flex-1 min-w-0">
                 <h4 class="text-sm font-bold text-slate-800 truncate">${item.name}</h4>
-                <p class="text-brand font-bold text-xs">$${(item.price * item.qty).toFixed(2)}</p>
+                <p class="text-brand font-bold text-xs">৳${(item.price * item.qty).toFixed(2)}</p>
             </div>
             <div class="flex items-center gap-3 bg-slate-50 rounded-lg px-2 py-1">
                 <button onclick="changeQty(${item.id}, -1)" class="text-slate-400 hover:text-rose-500"><i class="fa-solid fa-minus text-[10px]"></i></button>
@@ -245,8 +245,8 @@ function renderCartPanel() {
 function updateCartTotals(sub) {
     const subEl = document.getElementById('subtotalVal');
     const totalEl = document.getElementById('totalVal');
-    if (subEl) subEl.textContent = `$${sub.toFixed(2)}`;
-    if (totalEl) totalEl.textContent = `$${(sub + (sub > 0 ? DELIVERY_FEE : 0)).toFixed(2)}`;
+    if (subEl) subEl.textContent = `৳${sub.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `৳${(sub + (sub > 0 ? DELIVERY_FEE : 0)).toFixed(2)}`;
 }
 
 // ===== CHECKOUT =====
@@ -297,7 +297,7 @@ function openOrderPopup(order) {
     document.getElementById('popupTitle').textContent = `অর্ডার #${order.order_no}`;
     document.getElementById('popupPhone').textContent = order.phone;
     document.getElementById('popupAddress').textContent = order.address;
-    document.getElementById('popupTotal').textContent = `$${parseFloat(order.total).toFixed(2)}`;
+    document.getElementById('popupTotal').textContent = `৳${parseFloat(order.total).toFixed(2)}`;
     document.getElementById('popupStatus').textContent = order.status;
     
     // Date formatting
@@ -318,14 +318,14 @@ function openOrderPopup(order) {
     const itemsList = document.getElementById('popupItems');
     itemsList.innerHTML = order.items.map(item => `
         <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-2xl border border-white shadow-sm">
-            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-lg text-slate-800">
-                <i class="fa-solid ${item.icon}"></i>
+            <div class="w-10 h-10 bg-white rounded-xl overflow-hidden flex items-center justify-center text-lg text-slate-800 border border-slate-50">
+                ${item.image ? `<img src="${URLROOT}/uploads/${item.image}" class="w-full h-full object-cover">` : `<i class="fa-solid ${item.icon}"></i>`}
             </div>
             <div class="flex-1 min-w-0">
                 <h4 class="text-xs font-bold text-slate-800 truncate">${item.name}</h4>
-                <p class="text-[10px] text-slate-400 font-bold">পরিমাণ: ${item.qty} × $${parseFloat(item.price).toFixed(2)}</p>
+                <p class="text-[10px] text-slate-400 font-bold">পরিমাণ: ${item.qty} × ৳${parseFloat(item.price).toFixed(2)}</p>
             </div>
-            <span class="text-sm font-bold text-slate-900">$${(item.qty * item.price).toFixed(2)}</span>
+            <span class="text-sm font-bold text-slate-900">৳${(item.qty * item.price).toFixed(2)}</span>
         </div>
     `).join('');
 
@@ -436,12 +436,26 @@ function callCustomer() {
 }
 
 // ===== TOAST =====
-function showToast(msg) {
+function showToast(msg, img = null) {
     const toast = document.getElementById('toast');
     const msgEl = document.getElementById('toastMsg');
+    const imgEl = document.getElementById('toastImg');
+    const imgContainer = document.getElementById('toastImgContainer');
+    const iconEl = document.getElementById('toastIcon');
+    
     if (!toast) return;
     
     msgEl.textContent = msg;
+    
+    if (img) {
+        imgEl.src = `${URLROOT}/uploads/${img}`;
+        imgContainer.classList.remove('hidden');
+        iconEl.classList.add('hidden');
+    } else {
+        imgContainer.classList.add('hidden');
+        iconEl.classList.remove('hidden');
+    }
+    
     toast.classList.remove('opacity-0', 'translate-y-4');
     toast.classList.add('opacity-100', 'translate-y-0');
     

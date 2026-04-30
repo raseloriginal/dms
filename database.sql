@@ -59,3 +59,14 @@ INSERT INTO products (name, price, category, icon) VALUES
 ('Orange Juice', 3.29, 'Beverages', 'fa-glass-water'),
 ('Green Tea', 2.49, 'Beverages', 'fa-mug-hot'),
 ('Sparkling Water', 1.59, 'Beverages', 'fa-bottle-droplet');
+
+-- Admins Table
+CREATE TABLE IF NOT EXISTS admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed Admin (password: admin123)
+INSERT INTO admins (username, password) VALUES ('admin', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm');

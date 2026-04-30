@@ -33,7 +33,7 @@
     <div id="floatCart" class="absolute left-1/2 -translate-x-1/2 z-40 hidden transition-all duration-300 translate-y-10 opacity-0" style="bottom: calc(6rem + env(safe-area-inset-bottom));">
         <button onclick="openCart()" class="bg-brand hover:bg-brand-dark text-white px-5 py-3.5 rounded-md shadow-2xl shadow-brand/20 flex items-center gap-3 font-bold transform active:scale-95 transition-transform border border-white/10">
             <i class="fa-solid fa-cart-shopping"></i>
-            <span id="cartTotalFloat" class="text-xs">$0.00</span>
+            <span id="cartTotalFloat" class="text-xs">৳0.00</span>
             <span id="cartBadge" class="bg-white text-brand rounded w-6 h-6 flex items-center justify-center text-[10px] font-bold">0</span>
         </button>
     </div>
@@ -69,15 +69,15 @@
             <div class="bg-white p-5 rounded-md border border-slate-100 space-y-3 shadow-sm">
                 <div class="flex justify-between text-[10px] text-slate-400 font-bold">
                     <span>উপ-মোট</span>
-                    <span id="subtotalVal" class="text-slate-900">$0.00</span>
+                    <span id="subtotalVal" class="text-slate-900">৳0.00</span>
                 </div>
                 <div class="flex justify-between text-[10px] text-brand_orange font-bold">
                     <span>ডেলিভারি ফি</span>
-                    <span>$2.00</span>
+                    <span>৳2.00</span>
                 </div>
                 <div class="flex justify-between text-xl font-black text-slate-900 pt-3 border-t border-slate-50">
                     <span class="font-bold">সর্বমোট</span>
-                    <span id="totalVal">$2.00</span>
+                    <span id="totalVal">৳2.00</span>
                 </div>
             </div>
             
@@ -92,9 +92,14 @@
     <div id="cartOverlay" onclick="closeCart()" class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm z-[55] hidden opacity-0 transition-opacity duration-300"></div>
 
     <!-- TOAST -->
-    <div id="toast" class="absolute top-24 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white px-6 py-3.5 rounded-md shadow-[0_20px_50px_rgba(0,0,0,0.2)] opacity-0 transition-all duration-300 translate-y-4 pointer-events-none text-[10px] font-bold flex items-center gap-3">
-        <i class="fa-solid fa-circle-check text-brand text-lg"></i>
-        <span id="toastMsg">Order placed!</span>
+    <div id="toast" class="absolute top-24 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 text-white pl-3 pr-6 py-3 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] opacity-0 transition-all duration-500 translate-y-4 pointer-events-none text-[10px] font-bold flex items-center gap-4 border border-white/10 backdrop-blur-md">
+        <div id="toastImgContainer" class="w-10 h-10 rounded-xl overflow-hidden bg-white/10 flex-shrink-0 hidden">
+            <img id="toastImg" src="" class="w-full h-full object-cover">
+        </div>
+        <div id="toastIcon" class="w-10 h-10 rounded-xl bg-brand/20 flex items-center justify-center text-brand text-lg flex-shrink-0">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <span id="toastMsg" class="whitespace-nowrap">অর্ডার সফল হয়েছে!</span>
     </div>
 
     <!-- CUSTOM CONFIRM POPUP -->

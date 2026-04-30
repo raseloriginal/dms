@@ -31,7 +31,7 @@
                             </span>
                         </div>
                     </div>
-                    <span class="text-2xl font-bold text-brand">$<?php echo number_format($order->total, 2); ?></span>
+                    <span class="text-2xl font-bold text-brand">৳<?php echo number_format($order->total, 2); ?></span>
                 </div>
                 
                 <div class="space-y-4">

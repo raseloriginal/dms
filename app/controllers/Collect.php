@@ -16,6 +16,7 @@ class Collect extends Controller {
                         'id' => $item->product_id,
                         'name' => $item->name,
                         'icon' => $item->icon,
+                        'image' => $item->image,
                         'totalQty' => 0,
                         'orderCount' => 0
                     ];

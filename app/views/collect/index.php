@@ -25,8 +25,12 @@
     <div class="space-y-4 pb-24">
         <?php foreach($data['items'] as $item): ?>
             <div class="manifest-card bg-white rounded-md p-5 shadow-sm border border-slate-100 flex items-center gap-6 transition-all hover:border-brand/20" data-id="<?php echo $item->id; ?>">
-                <div class="w-16 h-16 bg-slate-50 rounded flex items-center justify-center text-3xl text-brand flex-shrink-0">
-                    <i class="fa-solid <?php echo $item->icon; ?>"></i>
+                <div class="w-16 h-16 bg-slate-50 rounded overflow-hidden flex items-center justify-center text-3xl text-brand flex-shrink-0 border border-slate-100">
+                    <?php if($item->image): ?>
+                        <img src="<?php echo URLROOT; ?>/uploads/<?php echo $item->image; ?>" class="w-full h-full object-cover">
+                    <?php else: ?>
+                        <i class="fa-solid <?php echo $item->icon; ?>"></i>
+                    <?php endif; ?>
                 </div>
                 
                 <div class="flex-1 min-w-0">

@@ -37,20 +37,24 @@
 <div id="productGrid" class="grid grid-cols-2 gap-4 mt-2">
     <?php foreach($data['products'] as $product): ?>
     <div class="product-card bg-white rounded-md p-4 shadow-sm border border-slate-100 flex flex-col gap-4 group transition-all hover:border-brand/40" data-category="<?php echo $product->category; ?>" data-name="<?php echo strtolower($product->name); ?>">
-        <div class="aspect-square bg-slate-50 rounded flex items-center justify-center text-4xl text-brand transition-transform group-hover:scale-105">
-            <i class="fa-solid <?php echo $product->icon; ?>"></i>
+        <div class="aspect-square bg-slate-50 rounded overflow-hidden flex items-center justify-center text-4xl text-brand transition-transform group-hover:scale-105 border border-slate-100">
+            <?php if($product->image): ?>
+                <img src="<?php echo URLROOT; ?>/uploads/<?php echo $product->image; ?>" alt="<?php echo $product->name; ?>" class="w-full h-full object-cover">
+            <?php else: ?>
+                <i class="fa-solid <?php echo $product->icon; ?>"></i>
+            <?php endif; ?>
         </div>
         <div class="flex-1 space-y-1">
             <div class="flex justify-between items-start gap-2">
                 <h3 class="text-xs font-bold text-slate-900 line-clamp-2 flex-1"><?php echo $product->name; ?></h3>
-                <span class="text-sm font-bold text-brand_orange flex-shrink-0">$<?php echo number_format($product->price, 2); ?></span>
+                <span class="text-sm font-bold text-brand_orange flex-shrink-0">৳<?php echo number_format($product->price, 2); ?></span>
             </div>
             <p class="text-[8px] font-bold text-slate-400"><?php echo $product->category; ?></p>
         </div>
         
         <div id="ctrl-<?php echo $product->id; ?>" class="mt-auto">
             <button 
-                onclick="addToCart({id: <?php echo $product->id; ?>, name: '<?php echo $product->name; ?>', price: <?php echo $product->price; ?>, icon: '<?php echo $product->icon; ?>'})"
+                onclick="addToCart({id: <?php echo $product->id; ?>, name: '<?php echo $product->name; ?>', price: <?php echo $product->price; ?>, icon: '<?php echo $product->icon; ?>', image: '<?php echo $product->image; ?>'})"
                 class="w-full h-11 bg-brand hover:bg-brand-dark text-white rounded flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-brand/20 font-bold text-[10px]"
             >
                 <i class="fa-solid fa-plus"></i>

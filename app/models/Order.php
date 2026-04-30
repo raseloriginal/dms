@@ -54,13 +54,14 @@ class Order {
 
     // Add item to order
     public function addOrderItem($orderId, $item) {
-        $this->db->query('INSERT INTO order_items (order_id, product_id, name, price, qty, icon) VALUES (:order_id, :product_id, :name, :price, :qty, :icon)');
+        $this->db->query('INSERT INTO order_items (order_id, product_id, name, price, qty, icon, image) VALUES (:order_id, :product_id, :name, :price, :qty, :icon, :image)');
         $this->db->bind(':order_id', $orderId);
         $this->db->bind(':product_id', $item['id']);
         $this->db->bind(':name', $item['name']);
         $this->db->bind(':price', $item['price']);
         $this->db->bind(':qty', $item['qty']);
         $this->db->bind(':icon', $item['icon']);
+        $this->db->bind(':image', $item['image'] ?? null);
         return $this->db->execute();
     }
 
