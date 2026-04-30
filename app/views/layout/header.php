@@ -89,10 +89,23 @@
                     <img src="<?php echo URLROOT; ?>/assets/img/logo.png" alt="PararBazar Logo" class="h-16 w-auto object-contain">
                 </a>
             </div>
-            <div class="bg-brand_orange/10 text-brand_orange text-[9px] font-bold px-2 py-1 rounded border border-brand_orange/20 flex items-center gap-1.5">
-                <div class="w-1 h-1 rounded-full bg-brand_orange animate-pulse"></div>
-                প্রিমিয়াম
-            </div>
+            <?php 
+            $currentUrl = $_GET['url'] ?? 'home';
+            $isStaffPage = in_array(explode('/', $currentUrl)[0], ['staff', 'collect', 'delivery']);
+            if (!$isStaffPage): 
+            ?>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <a href="<?php echo URLROOT; ?>/users/profile" class="bg-brand/10 text-brand text-[10px] font-bold px-3 py-1.5 rounded-full border border-brand/20 flex items-center gap-1.5 hover:bg-brand/20 transition-colors">
+                        <i class="fa-solid fa-user"></i>
+                        প্রোফাইল
+                    </a>
+                <?php else: ?>
+                    <button onclick="openLoginModal()" class="bg-brand text-white text-[10px] font-bold px-4 py-1.5 rounded-full shadow-md shadow-brand/20 flex items-center gap-1.5 hover:bg-brand-dark transition-colors active:scale-95">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        লগইন
+                    </button>
+                <?php endif; ?>
+            <?php endif; ?>
         </header>
 
         <!-- MAIN CONTENT AREA -->

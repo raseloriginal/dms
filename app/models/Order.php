@@ -12,6 +12,13 @@ class Order {
         return $this->db->resultSet();
     }
 
+    // Get orders by phone
+    public function getOrdersByPhone($phone) {
+        $this->db->query('SELECT * FROM orders WHERE phone = :phone ORDER BY created_at DESC');
+        $this->db->bind(':phone', $phone);
+        return $this->db->resultSet();
+    }
+
     // Get order by id
     public function getOrderById($id) {
         $this->db->query('SELECT * FROM orders WHERE id = :id');

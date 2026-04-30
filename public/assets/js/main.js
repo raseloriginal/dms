@@ -201,6 +201,7 @@ function closeAllPopups() {
     closeOrderPopup();
     closeCart();
     closeConfirm();
+    if(typeof closeLoginModal === 'function') closeLoginModal();
 }
 
 function renderCartPanel() {
@@ -333,30 +334,32 @@ function openOrderPopup(order) {
     const btnConfirm = document.getElementById('btnConfirm');
     const btnCancel = document.getElementById('btnCancel');
     
-    if (order.status === 'pending') {
-        btnConfirm.style.display = 'block';
-        btnCancel.style.display = 'block';
-        btnConfirm.onclick = () => {
-            showConfirm(
-                "অর্ডারটি গ্রহণ করুন", 
-                "আপনি কি নিশ্চিত যে এই অর্ডারটি গ্রহণ করতে চান?", 
-                "fa-check", 
-                "text-brand",
-                () => updateStatus(order.id, 'confirmed')
-            );
-        };
-        btnCancel.onclick = () => {
-            showConfirm(
-                "অর্ডারটি বাতিল করুন", 
-                "আপনি কি নিশ্চিত যে এই অর্ডারটি বাতিল করতে চান?", 
-                "fa-xmark", 
-                "text-rose-500",
-                () => updateStatus(order.id, 'cancelled')
-            );
-        };
-    } else {
-        btnConfirm.style.display = 'none';
-        btnCancel.style.display = 'none';
+    if (btnConfirm && btnCancel) {
+        if (order.status === 'pending') {
+            btnConfirm.style.display = 'block';
+            btnCancel.style.display = 'block';
+            btnConfirm.onclick = () => {
+                showConfirm(
+                    "অর্ডারটি গ্রহণ করুন", 
+                    "আপনি কি নিশ্চিত যে এই অর্ডারটি গ্রহণ করতে চান?", 
+                    "fa-check", 
+                    "text-brand",
+                    () => updateStatus(order.id, 'confirmed')
+                );
+            };
+            btnCancel.onclick = () => {
+                showConfirm(
+                    "অর্ডারটি বাতিল করুন", 
+                    "আপনি কি নিশ্চিত যে এই অর্ডারটি বাতিল করতে চান?", 
+                    "fa-xmark", 
+                    "text-rose-500",
+                    () => updateStatus(order.id, 'cancelled')
+                );
+            };
+        } else {
+            btnConfirm.style.display = 'none';
+            btnCancel.style.display = 'none';
+        }
     }
 
     const popup = document.getElementById('orderPopup');
@@ -669,3 +672,62 @@ document.addEventListener('DOMContentLoaded', () => {
         updateManifestProgress();
     }
 });
+
+// ===== LOGIN MODAL =====
+function openLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modal.querySelector('div:last-child').classList.remove('translate-y-full', 'sm:scale-90');
+        modal.querySelector('div:last-child').classList.add('sm:scale-100', 'translate-y-0');
+    }, 10);
+}
+
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (!modal) return;
+    modal.classList.add('opacity-0');
+    modal.querySelector('div:last-child').classList.remove('sm:scale-100', 'translate-y-0');
+    modal.querySelector('div:last-child').classList.add('translate-y-full', 'sm:scale-90');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+async function handleLogin(e) {
+    e.preventDefault();
+    const phone = document.getElementById('loginPhone').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    const errorEl = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+    
+    errorEl.classList.add('hidden');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+    
+    try {
+        const formData = new FormData();
+        formData.append('phone', phone);
+        formData.append('password', password);
+        
+        const res = await fetch(`${URLROOT}/users/login`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+            window.location.reload();
+        } else {
+            errorEl.textContent = data.message || "লগইন ফেইল্ড";
+            errorEl.classList.remove('hidden');
+            btn.disabled = false;
+            btn.innerHTML = '<span>লগইন করুন</span><i class="fa-solid fa-arrow-right-to-bracket"></i>';
+        }
+    } catch (err) {
+        errorEl.textContent = "সার্ভার এরর";
+        errorEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.innerHTML = '<span>লগইন করুন</span><i class="fa-solid fa-arrow-right-to-bracket"></i>';
+    }
+}

@@ -90,8 +90,8 @@
     </div>
     
     <div class="flex-1 overflow-y-auto px-6 py-6 no-scroll space-y-6">
-        <!-- Customer Info -->
-        <div class="grid grid-cols-2 gap-4">
+        <!-- Customer Info (Hidden) -->
+        <div class="hidden grid-cols-2 gap-4">
             <div class="bg-slate-50 p-4 rounded-md border border-slate-100">
                 <span class="text-[9px] font-bold text-slate-400 block mb-1">ফোন</span>
                 <p id="popupPhone" class="text-xs font-bold text-slate-900 tracking-wider">0123456789</p>
@@ -119,11 +119,6 @@
         <div class="flex flex-col">
             <span class="text-[9px] font-bold text-slate-400">সর্বমোট</span>
             <span id="popupTotal" class="text-3xl font-bold text-brand_orange">৳0.00</span>
-        </div>
-        <div class="flex gap-2">
-            <button onclick="callCustomer()" class="w-12 h-12 bg-white border border-slate-100 rounded-md flex items-center justify-center text-brand shadow-sm"><i class="fa-solid fa-phone"></i></button>
-            <button id="btnConfirm" class="bg-brand text-white px-8 py-3 rounded-md font-bold shadow-lg shadow-brand/20">অনুমোদন</button>
-            <button id="btnCancel" class="bg-rose-500/10 text-rose-500 px-6 py-3 rounded-md font-bold text-xs">প্রত্যাখ্যান</button>
         </div>
     </div>
 </div>

@@ -2,6 +2,7 @@
 class Cart extends Controller {
     public function __construct() {
         $this->orderModel = $this->model('Order');
+        $this->userModel = $this->model('User');
     }
 
     // Handle checkout AJAX
@@ -15,11 +16,30 @@ class Cart extends Controller {
                 return;
             }
 
-            // Generate order number
             $this->db = new Database();
             $this->db->query("SELECT COUNT(*) as count FROM orders");
             $count = $this->db->single()->count;
             $order_no = str_pad($count + 1, 4, '0', STR_PAD_LEFT);
+
+            // Auto create account if doesn't exist
+            $existingUser = $this->userModel->findUserByPhone($data['phone']);
+            if (!$existingUser) {
+                $userData = [
+                    'phone' => $data['phone'],
+                    'password' => $data['phone'],
+                    'address' => $data['address']
+                ];
+                $userId = $this->userModel->createUser($userData);
+                if ($userId && !isset($_SESSION['user_id'])) {
+                    $_SESSION['user_id'] = $userId;
+                    $_SESSION['user_phone'] = $data['phone'];
+                }
+            } else {
+                if (!isset($_SESSION['user_id'])) {
+                    $_SESSION['user_id'] = $existingUser->id;
+                    $_SESSION['user_phone'] = $existingUser->phone;
+                }
+            }
 
             $orderData = [
                 'order_no' => $order_no,

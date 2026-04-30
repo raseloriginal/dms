@@ -42,14 +42,21 @@
 </head>
 <body class="bg-slate-50 text-slate-900">
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen relative">
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 hidden lg:hidden opacity-0 transition-opacity duration-300"></div>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-brand text-white flex-shrink-0 hidden lg:flex flex-col">
-        <div class="p-6 border-b border-white/10">
+    <aside id="adminSidebar" class="w-64 bg-brand text-white flex-shrink-0 fixed inset-y-0 left-0 z-50 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 flex flex-col h-screen lg:h-auto overflow-y-auto">
+        <div class="p-6 border-b border-white/10 flex items-center justify-between">
             <a href="<?php echo URLROOT; ?>/admin" class="flex items-center gap-3">
                 <img src="<?php echo URLROOT; ?>/assets/img/logo.png" alt="Logo" class="h-10 bg-white p-1 rounded">
                 <span class="font-bold text-xl tracking-tight">Admin <span class="text-brand_orange">DMS</span></span>
             </a>
+            <!-- Mobile Close Button -->
+            <button id="closeSidebarBtn" class="lg:hidden text-white/50 hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-lg bg-white/5">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
         </div>
         
         <nav class="flex-1 p-4 space-y-2 mt-4">
@@ -90,9 +97,9 @@
     <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
         <!-- Header -->
-        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-8 z-10">
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-8 z-10 sticky top-0">
             <div class="lg:hidden">
-                <button class="p-2 text-brand">
+                <button id="mobileMenuBtn" class="p-2 text-brand hover:bg-slate-50 rounded-lg transition-colors">
                     <i class="fa-solid fa-bars text-xl"></i>
                 </button>
             </div>

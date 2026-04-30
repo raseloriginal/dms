@@ -1,32 +1,51 @@
-    </main>
+</main>
 
     <!-- BOTTOM NAV -->
-    <nav class="glass absolute bottom-0 left-0 right-0 z-50 px-8 pt-4 pb-7 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.05)] border-t border-slate-100" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom));">
-        <?php 
-        $currentUrl = $_GET['url'] ?? 'home';
-        $currentUrl = explode('/', $currentUrl)[0];
-        ?>
-        
-        <a href="<?php echo URLROOT; ?>/home" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'home' || $currentUrl == '') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
-            <span class="text-xl"><i class="fa-solid fa-bag-shopping"></i></span>
-            <span class="text-[9px] font-bold">দোকান</span>
-        </a>
-        
-        <a href="<?php echo URLROOT; ?>/orders" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'orders') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
-            <span class="text-xl"><i class="fa-solid fa-clipboard-list"></i></span>
-            <span class="text-[9px] font-bold">অর্ডার</span>
-        </a>
-        
-        <a href="<?php echo URLROOT; ?>/collect" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'collect') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
-            <span class="text-xl"><i class="fa-solid fa-box"></i></span>
-            <span class="text-[9px] font-bold">সংগ্রহ</span>
-        </a>
-        
-        <a href="<?php echo URLROOT; ?>/delivery" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'delivery') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
-            <span class="text-xl"><i class="fa-solid fa-truck-fast"></i></span>
-            <span class="text-[9px] font-bold">ডেলিভারি</span>
-        </a>
-    </nav>
+    <?php 
+    $fullUrl = $_GET['url'] ?? 'home';
+    if ($fullUrl !== 'staff/login'): 
+    ?>
+        <?php if (isset($_SESSION['staff_id'])): ?>
+        <nav class="glass absolute bottom-0 left-0 right-0 z-50 px-10 pt-4 pb-7 flex items-center justify-around shadow-[0_-10px_40px_rgba(0,0,0,0.05)] border-t border-slate-100" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom));">
+            <?php 
+            $currentUrl = explode('/', $fullUrl)[0];
+            ?>
+            <a href="<?php echo URLROOT; ?>/collect" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'collect') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
+                <span class="text-xl"><i class="fa-solid fa-box"></i></span>
+                <span class="text-[9px] font-bold">সংগ্রহ</span>
+            </a>
+            <a href="<?php echo URLROOT; ?>/delivery" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'delivery') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
+                <span class="text-xl"><i class="fa-solid fa-truck-fast"></i></span>
+                <span class="text-[9px] font-bold">ডেলিভারি</span>
+            </a>
+            <a href="<?php echo URLROOT; ?>/staff/logout" class="flex flex-col items-center gap-1.5 text-slate-500 transition-all hover:text-rose-500">
+                <span class="text-xl"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+                <span class="text-[9px] font-bold">লগআউট</span>
+            </a>
+        </nav>
+        <?php else: ?>
+        <nav class="glass absolute bottom-0 left-0 right-0 z-50 px-10 pt-4 pb-7 flex items-center justify-between shadow-[0_-10px_40px_rgba(0,0,0,0.05)] border-t border-slate-100" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom));">
+            <?php 
+            $currentUrl = explode('/', $fullUrl)[0];
+            ?>
+            
+            <a href="<?php echo URLROOT; ?>/home" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'home' || $currentUrl == '') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
+                <span class="text-xl"><i class="fa-solid fa-house"></i></span>
+                <span class="text-[9px] font-bold">হোম</span>
+            </a>
+            
+            <a href="<?php echo URLROOT; ?>/users/profile" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'users') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
+                <span class="text-xl"><i class="fa-solid fa-user"></i></span>
+                <span class="text-[9px] font-bold">প্রোফাইল</span>
+            </a>
+
+            <a href="<?php echo URLROOT; ?>/orders" class="flex flex-col items-center gap-1.5 <?php echo ($currentUrl == 'orders') ? 'text-brand_orange' : 'text-slate-500'; ?> transition-all hover:text-brand_orange">
+                <span class="text-xl"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                <span class="text-[9px] font-bold">অর্ডার হিস্টোরি</span>
+            </a>
+        </nav>
+        <?php endif; ?>
+    <?php endif; ?>
 
     <!-- FLOATING CART BUTTON -->
     <?php if ($currentUrl == 'home' || $currentUrl == ''): ?>
@@ -116,6 +135,44 @@
                 <button onclick="closeConfirm()" class="bg-slate-50 text-slate-400 py-4 rounded-md font-bold text-[10px] hover:bg-slate-100 transition-colors">বাতিল</button>
                 <button id="confirmActionBtn" class="bg-brand text-white py-4 rounded-md font-bold text-xs transform active:scale-95 transition-all">নিশ্চিত করুন</button>
             </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 z-[120] flex items-end sm:items-center justify-center hidden opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="closeLoginModal()"></div>
+        <div class="relative bg-white w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-8 shadow-2xl transform translate-y-full sm:translate-y-0 sm:scale-90 transition-transform duration-500 ease-out flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-slate-900">লগইন</h3>
+                <button onclick="closeLoginModal()" class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-1">ফোন নম্বর</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="fa-solid fa-phone"></i></span>
+                        <input id="loginPhone" type="tel" required placeholder="01XXXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-10 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 transition-all">
+                    </div>
+                </div>
+                
+                <div class="space-y-1">
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider pl-1">পাসওয়ার্ড</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                        <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-10 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand text-slate-900 transition-all">
+                    </div>
+                </div>
+
+                <div id="loginError" class="text-red-500 text-[10px] font-bold hidden text-center bg-red-50 py-2 rounded-lg border border-red-100"></div>
+                
+                <button type="submit" id="loginBtn" class="w-full bg-brand hover:bg-brand-dark text-white py-4 rounded-xl font-bold text-sm shadow-lg shadow-brand/20 transition-all flex items-center justify-center gap-2 mt-4 transform active:scale-95">
+                    <span>লগইন করুন</span>
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
         </div>
     </div>
 

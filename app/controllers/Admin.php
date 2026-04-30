@@ -174,6 +174,20 @@ class Admin extends Controller {
         }
     }
 
+    public function get_order_details($id) {
+        if (!$this->isLoggedIn()) {
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+            return;
+        }
+
+        $order = $this->orderModel->getOrderById($id);
+        if ($order) {
+            echo json_encode(['success' => true, 'order' => $order]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Order not found']);
+        }
+    }
+
     // Customer Management
     public function customers() {
         if (!$this->isLoggedIn()) {

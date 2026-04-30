@@ -5,7 +5,12 @@ class Orders extends Controller {
     }
 
     public function index() {
-        $orders = $this->orderModel->getOrders();
+        if (!isset($_SESSION['user_id'])) {
+            header('location: ' . URLROOT . '/home');
+            exit;
+        }
+
+        $orders = $this->orderModel->getOrdersByPhone($_SESSION['user_phone']);
         
         // Add items to each order
         foreach($orders as $order) {
