@@ -21,11 +21,6 @@ if ($isLocalhost) {
     // URL Root for Live Server
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https" : "http";
     define('URLROOT', $protocol . "://" . $_SERVER['HTTP_HOST']);
-
-    // Enable error reporting for debugging on live server (Remove this after fixing)
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
 }
 
 // App Root
