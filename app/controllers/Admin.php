@@ -1,5 +1,9 @@
 <?php
 class Admin extends Controller {
+    private $adminModel;
+    private $productModel;
+    private $orderModel;
+
     public function __construct() {
         $this->adminModel = $this->model('AdminModel');
         $this->productModel = $this->model('Product');

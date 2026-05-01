@@ -1,5 +1,7 @@
 <?php
 class Home extends Controller {
+    private $productModel;
+
     public function __construct() {
         $this->productModel = $this->model('Product');
     }

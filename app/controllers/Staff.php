@@ -1,5 +1,7 @@
 <?php
 class Staff extends Controller {
+    private $staffModel;
+
     public function __construct() {
         $this->staffModel = $this->model('StaffModel');
     }

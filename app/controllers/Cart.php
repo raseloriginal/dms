@@ -1,5 +1,9 @@
 <?php
 class Cart extends Controller {
+    private $orderModel;
+    private $userModel;
+    private $db;
+
     public function __construct() {
         $this->orderModel = $this->model('Order');
         $this->userModel = $this->model('User');

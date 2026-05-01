@@ -1,5 +1,7 @@
 <?php
 class Orders extends Controller {
+    private $orderModel;
+
     public function __construct() {
         $this->orderModel = $this->model('Order');
     }
